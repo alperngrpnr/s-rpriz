@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İyi ki Tanışmışız ❤️</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow: hidden;
+      height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.4), transparent 40%),
+        linear-gradient(180deg, #ff9ec4 0%, #ffc7dd 40%, #ffe7f0 100%);
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(2px);
+    }
+
+    .content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 5rem;
+      color: white;
+      text-shadow:
+        0 0 10px rgba(255,255,255,0.8),
+        0 0 25px rgba(255, 50, 120, 0.7),
+        0 0 50px rgba(255, 50, 120, 0.5);
+      animation: floatText 4s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      color: white;
+      font-size: 1.3rem;
+      opacity: 0.95;
+      max-width: 700px;
+      line-height: 1.6;
+      text-shadow: 0 0 10px rgba(0,0,0,0.2);
+      animation: fadeIn 3s ease;
+    }
+
+    @keyframes floatText {
+      0%,100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
+
+    .flower {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      animation: bloom 2.5s forwards;
+      transform: scale(0);
+      z-index: 2;
+    }
+
+    .petal {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle at 30% 30%, #fff0f6, #ff4f93);
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 70, 140, 0.5);
+    }
+
+    .petal:nth-child(1) { top: 0; left: 35px; }
+    .petal:nth-child(2) { top: 35px; left: 0; }
+    .petal:nth-child(3) { top: 35px; left: 70px; }
+    .petal:nth-child(4) { top: 70px; left: 35px; }
+    .petal:nth-child(5) { top: 12px; left: 12px; }
+    .petal:nth-child(6) { top: 12px; left: 58px; }
+    .petal:nth-child(7) { top: 58px; left: 12px; }
+    .petal:nth-child(8) { top: 58px; left: 58px; }
+
+    .center {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      background: radial-gradient(circle, #ffe066, #ffb703);
+      border-radius: 50%;
+      top: 43px;
+      left: 43px;
+      z-index: 5;
+      box-shadow: 0 0 15px rgba(255, 200, 0, 0.8);
+    }
+
+    @keyframes bloom {
+      0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.15) rotate(10deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .heart {
+      position: absolute;
+      color: rgba(255,255,255,0.9);
+      font-size: 20px;
+      animation: rise linear forwards;
+      z-index: 1;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-120vh) scale(1.8);
+        opacity: 0;
+      }
+    }
+
+    .glow-circle {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 70%);
+      border-radius: 50%;
+      filter: blur(20px);
+      z-index: 0;
+      animation: pulse 5s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%,100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.8rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="overlay"></div>
+  <div class="glow-circle"></div>
+
+  <div class="content">
+    <h1>❤️ İyi ki Tanışmışız ❤️</h1>
+    <div class="subtitle">
+      KÜÇÜK BİR SÜRPRİZ 🌸
+    </div>
+  </div>
+
+  <script>
+    function createFlower(x, y, delay) {
+      const flower = document.createElement('div');
+      flower.className = 'flower';
+      flower.style.left = x + 'px';
+      flower.style.top = y + 'px';
+      flower.style.animationDelay = delay + 's';
+
+      for (let i = 0; i < 8; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        flower.appendChild(petal);
+      }
+
+      const center = document.createElement('div');
+      center.className = 'center';
+      flower.appendChild(center);
+
+      document.body.appendChild(flower);
+    }
+
+    function generateFlowers() {
+      for (let i = 0; i < 28; i++) {
+        const x = Math.random() * (window.innerWidth - 120);
+        const y = Math.random() * (window.innerHeight - 120);
+        const delay = Math.random() * 4;
+        createFlower(x, y, delay);
+      }
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = '❤';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.bottom = '-30px';
+      heart.style.fontSize = (Math.random() * 25 + 15) + 'px';
+      heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 8000);
+    }
+
+    generateFlowers();
+
+    setInterval(createHeart, 250);
+  </script>
+
+</body>
+</html>
