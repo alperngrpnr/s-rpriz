@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Çikolata Analiz Sistemi</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Arial,sans-serif;
+}
+
+body{
+    background:#090909;
+    color:white;
+    overflow:hidden;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#bg{
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at 50% 50%, rgba(255,0,120,.15), transparent 40%);
+    animation:pulse 4s infinite;
+}
+
+@keyframes pulse{
+    50%{transform:scale(1.2);}
+}
+
+.card{
+    width:90%;
+    max-width:420px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:28px;
+    padding:30px;
+    text-align:center;
+    z-index:10;
+}
+
+.title{
+    font-size:28px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    opacity:.8;
+    margin-bottom:30px;
+}
+
+button{
+    border:none;
+    background:#ff2f92;
+    color:white;
+    padding:14px 28px;
+    border-radius:999px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+#scan{
+    display:none;
+}
+
+.percent{
+    font-size:60px;
+    font-weight:bold;
+    margin:25px 0;
+    color:#ff5db1;
+    text-shadow:0 0 25px #ff5db1;
+}
+
+#result{
+    display:none;
+}
+
+.bar{
+    width:100%;
+    height:18px;
+    background:#222;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:8px;
+    margin-bottom:18px;
+}
+
+.fill{
+    height:100%;
+    border-radius:999px;
+}
+
+.choco{
+    width:70%;
+    background:linear-gradient(90deg,#8b4513,#c47a44);
+}
+
+.berfin{
+    width:100%;
+    background:linear-gradient(90deg,#ff2f92,#ff7fc1);
+}
+
+.winner{
+    font-size:34px;
+    margin-top:25px;
+    color:#ff7fc1;
+    text-shadow:0 0 20px #ff2f92;
+}
+
+.final{
+    margin-top:15px;
+    line-height:1.7;
+}
+</style>
+</head>
+<body>
+
+<div id="bg"></div>
+
+<div class="card" id="start">
+
+<div class="title">🍫 Çikolata Analiz Sistemi</div>
+
+<div class="subtitle">
+Berfin'in tatlılık seviyesi ölçülecek...
+</div>
+
+<button onclick="startScan()">
+Analizi Başlat
+</button>
+
+</div>
+
+<div class="card" id="scan">
+
+<div class="title">Tarama Yapılıyor...</div>
+
+<div class="percent" id="percent">0%</div>
+
+<div class="subtitle">
+Lütfen bekleyiniz...
+</div>
+
+</div>
+
+<div class="card" id="result">
+
+<div class="title">📊 Sonuçlar</div>
+
+<div style="text-align:left">
+
+🍫 Çikolata
+<div class="bar">
+<div class="fill choco"></div>
+</div>
+
+❤️ Berfin
+<div class="bar">
+<div class="fill berfin"></div>
+</div>
+
+</div>
+
+<div class="winner">
+KAZANAN: BERFİN ❤️
+</div>
+
+<div class="final">
+Dünyadaki bütün çikolatalar incelendi...<br><br>
+
+Sonuç değişmedi.<br>
+
+Senin gülüşün,
+çikolatadan bile daha tatlı. 🍫❤️<br><br>
+
+<b>İyi ki Varsın Berfin ❤️</b>
+</div>
+
+</div>
+
+<script>
+
+function startScan(){
+
+document.getElementById("start").style.display="none";
+document.getElementById("scan").style.display="block";
+
+let p=0;
+
+const timer=setInterval(()=>{
+
+p+=Math.floor(Math.random()*12)+3;
+
+if(p>100)p=100;
+
+document.getElementById("percent").innerText=p+"%";
+
+if(navigator.vibrate){
+navigator.vibrate(30);
+}
+
+if(p===100){
+
+clearInterval(timer);
+
+setTimeout(()=>{
+
+document.getElementById("scan").style.display="none";
+document.getElementById("result").style.display="block";
+
+},1200);
+
+}
+
+},180);
+
+}
+</script>
+
+</body>
+</html>
