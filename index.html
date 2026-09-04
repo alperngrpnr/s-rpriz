@@ -1,219 +1,361 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birlikte 3 Ay & 4. Ayımıza Merhaba ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-start: #0f0c20;
+      --bg-end: #1b1335;
+      --accent: #ff6584;
+      --accent-glow: rgba(255, 101, 132, 0.45);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f5f3ff;
+      --text-muted: #b8b3ce;
+    }
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0}
-  .scene{
-    width:100%;
-    min-height:560px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:24px 16px 40px;
-    position:relative;
-    overflow:hidden;
-  }
-  .particle{
-    position:absolute;
-    border-radius:50%;
-    opacity:0;
-    pointer-events:none;
-    animation:pdrift var(--d) ease-in-out infinite var(--delay);
-  }
-  @keyframes pdrift{
-    0%{transform:translateY(0) translateX(0) scale(0.5);opacity:0}
-    20%{opacity:var(--op)}
-    80%{opacity:var(--op)}
-    100%{transform:translateY(-140px) translateX(var(--sx)) scale(1);opacity:0}
-  }
-  .flower-svg{
-    width:min(300px,85vw);
-    height:auto;
-    display:block;
-    animation:rise 1s cubic-bezier(0.22,1,0.36,1) forwards;
-    opacity:0;
-    transform:translateY(30px);
-  }
-  @keyframes rise{to{opacity:1;transform:translateY(0)}}
-  .petal-g{
-    transform-origin:150px 175px;
-    animation:bloom 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
-    opacity:0;
-  }
-  @keyframes bloom{
-    from{opacity:0;transform:rotate(var(--rot)) scale(0.1)}
-    to{opacity:1;transform:rotate(var(--rot)) scale(1)}
-  }
-  .stem-g{
-    animation:stemup 0.7s ease forwards;
-    opacity:0;
-    transform-origin:150px 270px;
-  }
-  @keyframes stemup{from{opacity:0;transform:scaleY(0)}to{opacity:1;transform:scaleY(1)}}
-  .leaf-g{
-    animation:leafpop 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
-    opacity:0;
-  }
-  @keyframes leafpop{
-    from{opacity:0;transform:scale(0) rotate(var(--lr))}
-    to{opacity:1;transform:scale(1) rotate(var(--lr))}
-  }
-  .center-g{
-    animation:cpop 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
-    animation-delay:0.9s;
-    opacity:0;
-    transform-origin:150px 170px;
-  }
-  @keyframes cpop{
-    from{opacity:0;transform:scale(0)}
-    to{opacity:1;transform:scale(1)}
-  }
-  .sparkle-g{
-    animation:spark var(--sd) ease both;
-    opacity:0;
-    transform-origin:var(--sx) var(--sy);
-  }
-  @keyframes spark{
-    0%{opacity:0;transform:scale(0)}
-    45%{opacity:1;transform:scale(1.2)}
-    100%{opacity:0;transform:scale(0)}
-  }
-  .msg-wrap{
-    margin-top:28px;
-    text-align:center;
-    animation:fadeup 0.9s ease forwards;
-    animation-delay:1.5s;
-    opacity:0;
-    padding:0 8px;
-  }
-  @keyframes fadeup{
-    from{opacity:0;transform:translateY(10px)}
-    to{opacity:1;transform:translateY(0)}
-  }
-  .msg-main{
-    font-family:'Playfair Display',Georgia,serif;
-    font-size:clamp(16px,4.5vw,21px);
-    font-weight:600;
-    color:#5a3e2b;
-    line-height:1.4;
-  }
-  .msg-sub{
-    margin-top:8px;
-    font-size:clamp(12px,3.2vw,14px);
-    color:#9a7a66;
-    font-style:italic;
-    font-family:'Playfair Display',Georgia,serif;
-    letter-spacing:0.02em;
-  }
-</style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
 
-<div class="scene" id="scene">
-  <div class="particle" style="--d:5s;--delay:-1s;--op:0.32;--sx:18px;width:7px;height:7px;background:#ffb3c1;top:18%;left:12%"></div>
-  <div class="particle" style="--d:6s;--delay:-3s;--op:0.25;--sx:-14px;width:5px;height:5px;background:#ffd6e0;top:35%;left:78%"></div>
-  <div class="particle" style="--d:7s;--delay:-0.6s;--op:0.28;--sx:10px;width:6px;height:6px;background:#ffe4b5;top:55%;left:20%"></div>
-  <div class="particle" style="--d:5.5s;--delay:-2.2s;--op:0.22;--sx:-18px;width:6px;height:6px;background:#ffb3c1;top:28%;left:65%"></div>
-  <div class="particle" style="--d:6.5s;--delay:-4.1s;--op:0.3;--sx:12px;width:5px;height:5px;background:#c8e6c9;top:65%;left:50%"></div>
-  <div class="particle" style="--d:4.8s;--delay:-1.8s;--op:0.2;--sx:-8px;width:8px;height:8px;background:#ffd6e0;top:12%;left:82%"></div>
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 50% 20%, #2e1d4d 0%, var(--bg-start) 60%, var(--bg-end) 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-  <svg class="flower-svg" viewBox="0 0 300 310" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
-    <title>Açan çiçek</title>
+    .hearts-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
 
-    <g class="stem-g" style="animation-delay:0.05s">
-      <path d="M150 215 Q148 250 147 285" stroke="#5a8a5a" stroke-width="5" stroke-linecap="round" fill="none"/>
-      <path d="M150 235 Q136 226 127 212" stroke="#5a8a5a" stroke-width="4" stroke-linecap="round" fill="none"/>
-      <path d="M150 248 Q164 239 173 225" stroke="#5a8a5a" stroke-width="4" stroke-linecap="round" fill="none"/>
-    </g>
-    <g class="leaf-g" style="--lr:0deg;animation-delay:0.5s">
-      <ellipse cx="130" cy="225" rx="18" ry="9" fill="#6ab86a" transform="rotate(-35 130 225)"/>
-    </g>
-    <g class="leaf-g" style="--lr:0deg;animation-delay:0.62s">
-      <ellipse cx="170" cy="238" rx="18" ry="9" fill="#6ab86a" transform="rotate(30 170 238)"/>
-    </g>
+    .heart-particle {
+      position: absolute;
+      bottom: -10%;
+      color: var(--accent);
+      opacity: 0;
+      animation: floatUp 7s linear infinite;
+    }
 
-    <g class="petal-g" style="--rot:0deg;animation-delay:0.82s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff0f3" stroke="#f9c4c4" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:30deg;animation-delay:0.88s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff0f3" stroke="#f9c4c4" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:60deg;animation-delay:0.94s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff5f0" stroke="#fad0b8" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:90deg;animation-delay:1.0s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff5f0" stroke="#fad0b8" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:120deg;animation-delay:1.06s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff0f8" stroke="#f9c4d8" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:150deg;animation-delay:1.12s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff0f8" stroke="#f9c4d8" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:180deg;animation-delay:1.18s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff0f3" stroke="#f9c4c4" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:210deg;animation-delay:1.24s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff0f3" stroke="#f9c4c4" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:240deg;animation-delay:1.3s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff5f0" stroke="#fad0b8" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:270deg;animation-delay:1.36s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff5f0" stroke="#fad0b8" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:300deg;animation-delay:1.42s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff0f8" stroke="#f9c4d8" stroke-width="1"/>
-    </g>
-    <g class="petal-g" style="--rot:330deg;animation-delay:1.48s">
-      <ellipse cx="150" cy="133" rx="16" ry="44" fill="#fff0f8" stroke="#f9c4d8" stroke-width="1"/>
-    </g>
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.6) rotate(0deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.35;
+      }
+      80% {
+        opacity: 0.25;
+      }
+      100% {
+        transform: translateY(-120vh) scale(1.1) rotate(45deg);
+        opacity: 0;
+      }
+    }
 
-    <g class="center-g">
-      <circle cx="150" cy="175" r="32" fill="#ffda6a" opacity="0.3"/>
-      <circle cx="150" cy="175" r="25" fill="#ffce54"/>
-      <circle cx="143" cy="169" r="2.5" fill="#e8a820" opacity="0.7"/>
-      <circle cx="155" cy="167" r="2" fill="#e8a820" opacity="0.7"/>
-      <circle cx="148" cy="180" r="2" fill="#e8a820" opacity="0.6"/>
-      <circle cx="158" cy="178" r="2.5" fill="#e8a820" opacity="0.7"/>
-      <circle cx="146" cy="174" r="7" fill="#ffe98a" opacity="0.45"/>
-    </g>
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 540px;
+    }
 
-    <g class="sparkle-g" style="--sd:1.1s;--sx:108px;--sy:118px;animation-delay:1.65s">
-      <path d="M108 118 L110 113 L112 118 L117 120 L112 122 L110 127 L108 122 L103 120 Z" fill="#ffe08a"/>
-    </g>
-    <g class="sparkle-g" style="--sd:0.95s;--sx:194px;--sy:122px;animation-delay:1.85s">
-      <path d="M194 122 L196 118 L198 122 L202 124 L198 126 L196 130 L194 126 L190 124 Z" fill="#ffc4d8"/>
-    </g>
-    <g class="sparkle-g" style="--sd:1.2s;--sx:120px;--sy:148px;animation-delay:2.0s">
-      <path d="M120 148 L122 144 L124 148 L128 150 L124 152 L122 156 L120 152 L116 150 Z" fill="#c8e6c9"/>
-    </g>
-    <g class="sparkle-g" style="--sd:0.9s;--sx:182px;--sy:150px;animation-delay:1.95s">
-      <path d="M182 150 L183 147 L184 150 L187 151 L184 152 L183 155 L182 152 L179 151 Z" fill="#ffe08a"/>
-    </g>
-  </svg>
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 40px 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px var(--accent-glow);
+      text-align: center;
+      position: relative;
+    }
 
-  <div class="msg-wrap">
-    <div class="msg-main">AŞKIM, GÜZELİMM, BERFİNİMMMM</div>
-    <div class="msg-sub">bU ÇİÇEK SENİN İÇİN SEVGİLİMM...</div>
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      background: rgba(255, 101, 132, 0.12);
+      border: 1px solid rgba(255, 101, 132, 0.3);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #ffa1b5;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 40%, #ffcbd5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .counter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .counter-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 14px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.25s ease;
+    }
+
+    .counter-box:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 101, 132, 0.4);
+    }
+
+    .counter-num {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #ffffff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .counter-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .interactive-section {
+      position: relative;
+    }
+
+    .open-btn {
+      background: linear-gradient(135deg, #ff6584 0%, #d83a56 100%);
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 25px rgba(216, 58, 86, 0.4);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .open-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 12px 30px rgba(216, 58, 86, 0.6);
+    }
+
+    .open-btn:active {
+      transform: scale(0.98);
+    }
+
+    .letter-modal {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 0.4s ease;
+      background: rgba(18, 14, 33, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-top: 24px;
+      text-align: left;
+    }
+
+    .letter-modal.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter-modal p {
+      color: #e0dbf5;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .letter-modal p:last-child {
+      margin-bottom: 0;
+      font-style: italic;
+      color: #ffa1b5;
+      text-align: right;
+    }
+
+    .heart-icon {
+      animation: pulse 1.8s infinite;
+      display: inline-block;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.18); }
+    }
+
+    @media (max-width: 480px) {
+      .glass-card {
+        padding: 30px 20px;
+      }
+      h1 {
+        font-size: 1.75rem;
+      }
+      .counter-num {
+        font-size: 1.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hearts-container" id="hearts"></div>
+
+  <div class="wrapper">
+    <div class="glass-card">
+      <div class="badge">
+        <span class="heart-icon">❤️</span> 4 Haziran'dan Beri • 4. Ayımız Kutlu Olsun
+      </div>
+
+      <h1>Birlikte Her An Çok Özel</h1>
+      <p class="subtitle">
+        4 Haziran'da başlayan yolculuğumuzda dolu dolu 3 ayı geride bıraktık ve bugün 4. ayımıza adım attık. Seninle geçen her an çok kıymetli.
+      </p>
+
+      <!-- Canlı Süre Sayacı -->
+      <div class="counter-grid">
+        <div class="counter-box">
+          <span class="counter-num" id="days">00</span>
+          <span class="counter-label">Gün</span>
+        </div>
+        <div class="counter-box">
+          <span class="counter-num" id="hours">00</span>
+          <span class="counter-label">Saat</span>
+        </div>
+        <div class="counter-box">
+          <span class="counter-num" id="minutes">00</span>
+          <span class="counter-label">Dakika</span>
+        </div>
+        <div class="counter-box">
+          <span class="counter-num" id="seconds">00</span>
+          <span class="counter-label">Saniye</span>
+        </div>
+      </div>
+
+      <!-- Tıklanabilir Mektup -->
+      <div class="interactive-section">
+        <button class="open-btn" id="toggleLetter">
+          Küçük Bir Not Oku ✨
+        </button>
+
+        <div class="letter-modal" id="letter">
+          <p>
+            4 Haziran gününden bu yana geçen her gün, hayatıma kattığın en güzel güzellik oldu.
+          </p>
+          <p>
+            Birlikte 3 koca ayı geride bıraktık ve bugün 4. ayımıza başladık. Zaman su gibi aksa da seninle güldüğüm, paylaştığım her an hafızamda hep capcanlı. Önümüzde birlikte biriktireceğimiz daha çok güzel gün var.
+          </p>
+          <p>
+            İyi ki varsın, 4. ayımız kutlu olsun! ✨
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<script>
-(function(){
-  var scene=document.getElementById('scene');
-  scene.addEventListener('click',function(e){
-    var p=document.createElement('div');
-    var sz=5+Math.random()*7;
-    var colors=['#ffb3c1','#ffd6e0','#ffe4b5','#c8e6c9','#f9c4c4','#fad0b8'];
-    var c=colors[Math.floor(Math.random()*colors.length)];
-    var r=scene.getBoundingClientRect();
-    p.style.cssText='position:absolute;pointer-events:none;border-radius:50%;z-index:10;width:'+sz+'px;height:'+sz+'px;background:'+c+';left:'+(e.clientX-r.left-sz/2)+'px;top:'+(e.clientY-r.top-sz/2)+'px;';
-    p.style.setProperty('--d','1.1s');
-    p.style.setProperty('--delay','0s');
-    p.style.setProperty('--op','0.85');
-    p.style.setProperty('--sx',(Math.random()*36-18)+'px');
-    p.style.animation='pdrift 1.1s ease forwards';
-    scene.appendChild(p);
-    setTimeout(function(){p.remove()},1200);
-  });
-})();
-</script>
+  <script>
+    // 4 Haziran başlangıç tarihi (Ay indeksi 5 = Haziran)
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 5, 4, 0, 0, 0);
+
+    function updateCounter() {
+      const now = new Date();
+      let diff = now - startDate;
+
+      if (diff < 0) {
+        startDate.setFullYear(currentYear - 1);
+        diff = now - startDate;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('days').innerText = String(days).padStart(2, '0');
+      document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+      document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+    }
+
+    setInterval(updateCounter, 1000);
+    updateCounter();
+
+    const btn = document.getElementById('toggleLetter');
+    const letter = document.getElementById('letter');
+
+    btn.addEventListener('click', () => {
+      const isOpen = letter.classList.toggle('active');
+      btn.innerText = isOpen ? 'Notu Kapat' : 'Küçük Bir Not Oku ✨';
+    });
+
+    const container = document.getElementById('hearts');
+    const heartSymbols = ['♥', '♡', '💖', '✨'];
+
+    function createHeart() {
+      const el = document.createElement('div');
+      el.classList.add('heart-particle');
+      el.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.fontSize = Math.random() * 16 + 14 + 'px';
+      el.style.animationDuration = Math.random() * 3 + 5 + 's';
+      container.appendChild(el);
+
+      setTimeout(() => el.remove(), 8000);
+    }
+
+    setInterval(createHeart, 450);
+  </script>
+</body>
+</html>
