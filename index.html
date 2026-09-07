@@ -3,358 +3,294 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Birlikte 3 Ay & 4. Ayımıza Merhaba ✨</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Geçmiş Olsun Sevgilim ❤️</title>
   <style>
-    :root {
-      --bg-start: #0f0c20;
-      --bg-end: #1b1335;
-      --accent: #ff6584;
-      --accent-glow: rgba(255, 101, 132, 0.45);
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --text-main: #f5f3ff;
-      --text-muted: #b8b3ce;
-    }
-
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      user-select: none;
     }
 
     body {
       min-height: 100vh;
-      background: radial-gradient(circle at 50% 20%, #2e1d4d 0%, var(--bg-start) 60%, var(--bg-end) 100%);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: var(--text-main);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px 16px;
-      overflow-x: hidden;
+      background: radial-gradient(circle at center, #2e1a2f 0%, #120b18 100%);
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
       position: relative;
     }
 
-    .hearts-container {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .heart-particle {
+    /* Arka plan kalpleri */
+    .bg-heart {
       position: absolute;
-      bottom: -10%;
-      color: var(--accent);
-      opacity: 0;
-      animation: floatUp 7s linear infinite;
+      color: rgba(255, 105, 180, 0.25);
+      animation: floatUp linear infinite;
+      z-index: 1;
+      user-select: none;
+      pointer-events: none;
     }
 
     @keyframes floatUp {
       0% {
-        transform: translateY(0) scale(0.6) rotate(0deg);
+        transform: translateY(100vh) scale(0.6) rotate(0deg);
         opacity: 0;
       }
       20% {
-        opacity: 0.35;
+        opacity: 0.8;
       }
       80% {
-        opacity: 0.25;
+        opacity: 0.8;
       }
       100% {
-        transform: translateY(-120vh) scale(1.1) rotate(45deg);
+        transform: translateY(-10vh) scale(1.2) rotate(360deg);
         opacity: 0;
       }
     }
 
-    .wrapper {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 540px;
-    }
-
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      padding: 40px 32px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px var(--accent-glow);
-      text-align: center;
-      position: relative;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 16px;
-      background: rgba(255, 101, 132, 0.12);
-      border: 1px solid rgba(255, 101, 132, 0.3);
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: #ffa1b5;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      font-weight: 600;
-      line-height: 1.25;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, #ffffff 40%, #ffcbd5 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .subtitle {
-      color: var(--text-muted);
-      font-size: 0.98rem;
-      line-height: 1.6;
-      margin-bottom: 30px;
-    }
-
-    .counter-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 32px;
-    }
-
-    .counter-box {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 14px 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.25s ease;
-    }
-
-    .counter-box:hover {
-      transform: translateY(-3px);
-      border-color: rgba(255, 101, 132, 0.4);
-    }
-
-    .counter-num {
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: #ffffff;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .counter-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .interactive-section {
-      position: relative;
-    }
-
-    .open-btn {
-      background: linear-gradient(135deg, #ff6584 0%, #d83a56 100%);
-      color: #ffffff;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 8px 25px rgba(216, 58, 86, 0.4);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .open-btn:hover {
-      transform: scale(1.04);
-      box-shadow: 0 12px 30px rgba(216, 58, 86, 0.6);
-    }
-
-    .open-btn:active {
-      transform: scale(0.98);
-    }
-
-    .letter-modal {
-      display: none;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: all 0.4s ease;
-      background: rgba(18, 14, 33, 0.9);
+    /* Mesaj Kartı */
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
-      padding: 24px 20px;
-      margin-top: 24px;
-      text-align: left;
+      padding: 24px 32px;
+      text-align: center;
+      max-width: 420px;
+      margin: 0 16px 20px 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      animation: fadeInDown 1.2s ease-out;
     }
 
-    .letter-modal.active {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
+    .card h1 {
+      font-size: 1.8rem;
+      color: #ff758c;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
     }
 
-    .letter-modal p {
-      color: #e0dbf5;
-      font-size: 0.95rem;
-      line-height: 1.7;
-      margin-bottom: 12px;
+    .card p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #fce4ec;
+      font-weight: 300;
     }
 
-    .letter-modal p:last-child {
-      margin-bottom: 0;
-      font-style: italic;
-      color: #ffa1b5;
-      text-align: right;
-    }
-
-    .heart-icon {
-      animation: pulse 1.8s infinite;
-      display: inline-block;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.18); }
-    }
-
-    @media (max-width: 480px) {
-      .glass-card {
-        padding: 30px 20px;
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
       }
-      h1 {
-        font-size: 1.75rem;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
-      .counter-num {
-        font-size: 1.15rem;
+    }
+
+    /* Buket Alanı */
+    .bouquet-container {
+      position: relative;
+      width: 320px;
+      height: 380px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 5;
+      animation: scaleIn 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.7);
       }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Vazo / Buket Sarmal Kağıdı */
+    .wrapper {
+      position: absolute;
+      bottom: 20px;
+      width: 140px;
+      height: 170px;
+      background: linear-gradient(135deg, #d7ccc8 0%, #a1887f 100%);
+      clip-path: polygon(15% 0%, 85% 0%, 65% 100%, 35% 100%);
+      box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.3);
+      z-index: 4;
+    }
+
+    .ribbon {
+      position: absolute;
+      bottom: 105px;
+      width: 70px;
+      height: 14px;
+      background: #ff4081;
+      border-radius: 7px;
+      z-index: 5;
+      box-shadow: 0 4px 10px rgba(255, 64, 129, 0.5);
+    }
+
+    .ribbon::after {
+      content: '❤';
+      position: absolute;
+      top: -9px;
+      left: 27px;
+      font-size: 20px;
+      color: #ff1744;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Saplar */
+    .stem {
+      position: absolute;
+      bottom: 80px;
+      width: 6px;
+      height: 180px;
+      background: linear-gradient(to top, #2e7d32, #4caf50);
+      border-radius: 4px;
+      transform-origin: bottom center;
+    }
+
+    .stem-1 { transform: rotate(-24deg); height: 210px; }
+    .stem-2 { transform: rotate(-12deg); height: 235px; }
+    .stem-3 { transform: rotate(0deg);   height: 250px; }
+    .stem-4 { transform: rotate(12deg);  height: 235px; }
+    .stem-5 { transform: rotate(24deg);  height: 210px; }
+
+    /* Çiçek Başları */
+    .flower {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: gentleSway 4s ease-in-out infinite alternate;
+    }
+
+    .flower-1 { top: 75px;  left: 25px;  animation-delay: 0.2s; }
+    .flower-2 { top: 40px;  left: 65px;  animation-delay: 0.5s; }
+    .flower-3 { top: 15px;  left: 125px; animation-delay: 0s; }
+    .flower-4 { top: 40px;  left: 185px; animation-delay: 0.7s; }
+    .flower-5 { top: 75px;  left: 225px; animation-delay: 0.4s; }
+
+    @keyframes gentleSway {
+      from { transform: rotate(-3deg); }
+      to { transform: rotate(3deg); }
+    }
+
+    /* Yapraklar */
+    .petal {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50% 50% 0 50%;
+      transform-origin: bottom right;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    /* Renk Paleti */
+    .flower-1 .petal, .flower-5 .petal {
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+    }
+    .flower-2 .petal, .flower-4 .petal {
+      background: linear-gradient(135deg, #ff4b72 0%, #f80759 100%);
+    }
+    .flower-3 .petal {
+      background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+    }
+
+    .petal:nth-child(1) { transform: rotate(0deg); }
+    .petal:nth-child(2) { transform: rotate(72deg); }
+    .petal:nth-child(3) { transform: rotate(144deg); }
+    .petal:nth-child(4) { transform: rotate(216deg); }
+    .petal:nth-child(5) { transform: rotate(288deg); }
+
+    /* Çiçek Göbeği */
+    .center {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: radial-gradient(circle, #fff176 30%, #fbc02d 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255, 235, 59, 0.8);
+      z-index: 2;
     }
   </style>
 </head>
 <body>
 
-  <div class="hearts-container" id="hearts"></div>
+  <div class="card">
+    <h1>Geçmiş Olsun Aşkım ❤️</h1>
+    <p>
+      Hemen iyileşip aramıza dönmeni bekliyorum.<br />
+      Senin için solmayacak bir buket hazırladım. Çok güçlüsün, her zaman yanındayım!
+    </p>
+  </div>
 
-  <div class="wrapper">
-    <div class="glass-card">
-      <div class="badge">
-        <span class="heart-icon">❤️</span> 4 Haziran'dan Beri • 4. Ayımız Kutlu Olsun
-      </div>
+  <div class="bouquet-container">
+    <!-- Saplar -->
+    <div class="stem stem-1"></div>
+    <div class="stem stem-2"></div>
+    <div class="stem stem-3"></div>
+    <div class="stem stem-4"></div>
+    <div class="stem stem-5"></div>
 
-      <h1>Birlikte Her An Çok Özel</h1>
-      <p class="subtitle">
-        4 Haziran'da başlayan yolculuğumuzda dolu dolu 3 ayı geride bıraktık ve bugün 4. ayımıza adım attık. Seninle geçen her an çok kıymetli.
-      </p>
-
-      <!-- Canlı Süre Sayacı -->
-      <div class="counter-grid">
-        <div class="counter-box">
-          <span class="counter-num" id="days">00</span>
-          <span class="counter-label">Gün</span>
-        </div>
-        <div class="counter-box">
-          <span class="counter-num" id="hours">00</span>
-          <span class="counter-label">Saat</span>
-        </div>
-        <div class="counter-box">
-          <span class="counter-num" id="minutes">00</span>
-          <span class="counter-label">Dakika</span>
-        </div>
-        <div class="counter-box">
-          <span class="counter-num" id="seconds">00</span>
-          <span class="counter-label">Saniye</span>
-        </div>
-      </div>
-
-      <!-- Tıklanabilir Mektup -->
-      <div class="interactive-section">
-        <button class="open-btn" id="toggleLetter">
-          Küçük Bir Not Oku ✨
-        </button>
-
-        <div class="letter-modal" id="letter">
-          <p>
-            4 Haziran gününden bu yana geçen her gün, hayatıma kattığın en güzel güzellik oldu.
-          </p>
-          <p>
-            Birlikte 3 koca ayı geride bıraktık ve bugün 4. ayımıza başladık. Zaman su gibi aksa da seninle güldüğüm, paylaştığım her an hafızamda hep capcanlı. Önümüzde birlikte biriktireceğimiz daha çok güzel gün var.
-          </p>
-          <p>
-            İyi ki varsın, 4. ayımız kutlu olsun! ✨
-          </p>
-        </div>
-      </div>
+    <!-- Çiçekler -->
+    <div class="flower flower-1">
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="center"></div>
     </div>
+
+    <div class="flower flower-2">
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="center"></div>
+    </div>
+
+    <div class="flower flower-3">
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="center"></div>
+    </div>
+
+    <div class="flower flower-4">
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="center"></div>
+    </div>
+
+    <div class="flower flower-5">
+      <div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div>
+      <div class="center"></div>
+    </div>
+
+    <!-- Buket Ambalajı & Kurdele -->
+    <div class="wrapper"></div>
+    <div class="ribbon"></div>
   </div>
 
   <script>
-    // 4 Haziran başlangıç tarihi (Ay indeksi 5 = Haziran)
-    const currentYear = new Date().getFullYear();
-    const startDate = new Date(currentYear, 5, 4, 0, 0, 0);
-
-    function updateCounter() {
-      const now = new Date();
-      let diff = now - startDate;
-
-      if (diff < 0) {
-        startDate.setFullYear(currentYear - 1);
-        diff = now - startDate;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-
-      document.getElementById('days').innerText = String(days).padStart(2, '0');
-      document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-      document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-      document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
-    }
-
-    setInterval(updateCounter, 1000);
-    updateCounter();
-
-    const btn = document.getElementById('toggleLetter');
-    const letter = document.getElementById('letter');
-
-    btn.addEventListener('click', () => {
-      const isOpen = letter.classList.toggle('active');
-      btn.innerText = isOpen ? 'Notu Kapat' : 'Küçük Bir Not Oku ✨';
-    });
-
-    const container = document.getElementById('hearts');
-    const heartSymbols = ['♥', '♡', '💖', '✨'];
-
+    // Arka planda yüzen simgeler
+    const icons = ['🌸', '✨', '💖', '🌷', '🤍'];
     function createHeart() {
-      const el = document.createElement('div');
-      el.classList.add('heart-particle');
-      el.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.fontSize = Math.random() * 16 + 14 + 'px';
-      el.style.animationDuration = Math.random() * 3 + 5 + 's';
-      container.appendChild(el);
+      const heart = document.createElement('div');
+      heart.className = 'bg-heart';
+      heart.innerText = icons[Math.floor(Math.random() * icons.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+      heart.style.fontSize = Math.random() * 14 + 14 + 'px';
+      document.body.appendChild(heart);
 
-      setTimeout(() => el.remove(), 8000);
+      setTimeout(() => {
+        heart.remove();
+      }, 7000);
     }
-
     setInterval(createHeart, 450);
   </script>
 </body>
