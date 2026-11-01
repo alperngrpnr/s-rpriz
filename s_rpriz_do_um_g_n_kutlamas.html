@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sana Bir Sürprizim Var! 🎂</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Tone.js for Birthday Melody & Sound Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --gold: #facc15;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 50% 40%, #1e1b4b 0%, #0a0a0c 75%);
+            color: #ffffff;
+            height: 100dvh;
+            width: 100vw;
+            overflow: hidden;
+            user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .font-celebrate {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Arka plan parıltı efekti */
+        .ambient-glow {
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(250, 204, 21, 0.16) 0%, rgba(236, 72, 153, 0.08) 50%, transparent 72%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            transition: all 0.9s ease;
+        }
+
+        .stage-active .ambient-glow {
+            width: 520px;
+            height: 520px;
+            background: radial-gradient(circle, rgba(250, 204, 21, 0.3) 0%, rgba(236, 72, 153, 0.18) 55%, transparent 75%);
+        }
+
+        /* Mobil Odaklı Pasta Konteyneri */
+        #cake-wrapper {
+            position: relative;
+            width: 240px;
+            height: 220px;
+            cursor: pointer;
+            transition: transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 20;
+            touch-action: manipulation;
+        }
+
+        /* Başlangıçta hafif süzülme */
+        .cake-idle {
+            animation: floatCake 3s ease-in-out infinite;
+        }
+
+        @keyframes floatCake {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.03); }
+        }
+
+        /* 1. AŞAMA: Pasta Yaklaşsın (Mobil ekrana taşmadan) */
+        .cake-zoomed {
+            transform: scale(1.14) translateY(25px) !important;
+        }
+
+        /* 2. AŞAMA: Pasta Açılınca Aşağıda Konumlansın ki Fotoğraf ve Yazıyı Kapatmasın */
+        .cake-opened {
+            transform: scale(1.05) translateY(85px) !important;
+        }
+
+        /* Pasta Katmanları Geçişleri */
+        #cake-top-group {
+            transition: transform 0.85s cubic-bezier(0.68, -0.55, 0.26, 1.55), opacity 0.5s ease;
+            transform-origin: center bottom;
+            z-index: 30;
+        }
+
+        #cake-bottom-group {
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 25;
+        }
+
+        .cake-opened #cake-top-group {
+            transform: translateY(-130px) rotate(-12deg) scale(0.75);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cake-opened #cake-bottom-group {
+            transform: translateY(10px) scale(0.96);
+        }
+
+        /* Mum Alevi Animasyonu */
+        .flame {
+            width: 12px;
+            height: 20px;
+            background: radial-gradient(ellipse at bottom, #ffffff 15%, #fde047 50%, #f97316 85%, transparent 100%);
+            border-radius: 50% 50% 35% 35%;
+            box-shadow: 0 0 14px #f59e0b, 0 0 28px #facc15;
+            animation: flicker 0.14s ease-in-out infinite alternate;
+            transform-origin: center bottom;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-3deg); opacity: 0.92; }
+            100% { transform: scale(1.12, 0.94) rotate(3deg); opacity: 1; }
+        }
+
+        /* 3. AŞAMA: İçinden Fotoğraf Çıksın (Tam Ekranın Ortasında) */
+        #photo-surprise {
+            position: absolute;
+            left: 50%;
+            bottom: 70px;
+            transform: translateX(-50%) translateY(30px) scale(0.1) rotate(-6deg);
+            opacity: 0;
+            transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 35;
+            pointer-events: none;
+        }
+
+        .cake-opened #photo-surprise {
+            transform: translateX(-50%) translateY(-64px) scale(1) rotate(0deg);
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 40;
+        }
+
+        /* Fotoğraf Çerçevesi Parıltısı (Yuvarlak & Altın Parıltılı) */
+        .photo-frame {
+            position: relative;
+            padding: 5px;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #facc15, #ec4899, #8b5cf6, #facc15);
+            background-size: 300% 300%;
+            animation: gradientBorder 4s ease infinite;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 32px rgba(250, 204, 21, 0.75);
+        }
+
+        @keyframes gradientBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 4. AŞAMA: Üstteki Net Görünür Kutlama Kartı */
+        #celebration-banner {
+            opacity: 0;
+            transform: translateY(-25px) scale(0.92);
+            transition: all 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        #celebration-banner.show-banner {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        /* Altın Sarısı Parlak Başlık (Her ekranda %100 okunaklı) */
+        .birthday-title {
+            color: #fde047;
+            text-shadow: 0 2px 10px rgba(250, 204, 21, 0.45), 0 2px 4px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Krema Damlaları */
+        .icing-drip {
+            background: #fdf2f8;
+            border-radius: 0 0 9999px 9999px;
+            box-shadow: inset 0 -2px 4px rgba(244, 114, 182, 0.35);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between px-3 py-3 relative select-none">
+
+    <!-- Arka Plan Işık Efekti -->
+    <div class="ambient-glow top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+    <!-- ÜST BAR: Mobil Uyumlu Kompakt Kontroller -->
+    <header class="w-full max-w-md flex items-center justify-between z-50 shrink-0">
+        <div class="flex items-center gap-2">
+            <button id="replay-btn" onclick="resetSurprise()" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-full bg-black/70 hover:bg-black/90 border border-yellow-400/50 backdrop-blur-md text-xs font-semibold text-yellow-300 transition-all shadow-lg active:scale-95">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Tekrar</span>
+            </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Ses Aç/Kapat -->
+            <button id="sound-btn" onclick="toggleMute()" class="w-9 h-9 rounded-full bg-black/60 border border-white/20 backdrop-blur-md flex items-center justify-center text-yellow-300 transition-all shadow-lg active:scale-95" title="Sesi Aç/Kapat">
+                <i id="sound-icon" class="fa-solid fa-volume-high text-sm"></i>
+            </button>
+
+            <!-- Fotoğraf & Yazı Değiştirme Butonu -->
+            <button onclick="openCustomizeModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/40 backdrop-blur-md text-[11px] font-semibold text-yellow-200 transition-all shadow-lg active:scale-95">
+                <i class="fa-solid fa-camera text-yellow-400"></i>
+                <span>Fotoğraf Değiştir</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ANA MOBİL SAHNE (9:16 Dikey Ekrana Tam Oturan Düzen) -->
+    <main id="scene-container" class="flex-1 w-full max-w-md flex flex-col items-center justify-between py-2 relative z-30 overflow-hidden">
+
+        <!-- ÜST BÖLÜM: KUTLAMA YAZISI KARTI (Açıldığında En Üstte ve Tam Görünür) -->
+        <div id="celebration-banner" class="w-full z-50 mt-1">
+            <div class="bg-black/90 backdrop-blur-xl border-2 border-yellow-400 rounded-3xl px-4 py-3.5 text-center shadow-[0_10px_40px_rgba(0,0,0,0.95),0_0_30px_rgba(250,204,21,0.3)]">
+                <!-- Lakap Rozeti -->
+                <div class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-gradient-to-r from-yellow-400/25 via-amber-400/25 to-pink-500/25 border border-yellow-400/70 text-yellow-300 text-xs sm:text-sm font-extrabold tracking-wider mb-1.5 shadow-sm">
+                    <span id="display-name">GAZOZCUU 🍾🥤</span>
+                </div>
+
+                <!-- Ana Başlık -->
+                <h1 class="font-celebrate text-2xl sm:text-3xl font-bold tracking-wide birthday-title leading-tight">
+                    İyi ki Doğdun!
+                </h1>
+
+                <!-- Açıklama Mesajı -->
+                <p id="display-message" class="mt-2 text-white text-sm sm:text-base font-extrabold tracking-wide leading-snug bg-gradient-to-r from-yellow-500/20 via-pink-500/20 to-purple-500/20 rounded-2xl py-2.5 px-3 border border-yellow-400/40 shadow-inner">
+                    MUTLU YILLAR YUSUF ALİİ! 🎉🎂
+                </p>
+            </div>
+        </div>
+
+        <!-- BAŞLANGIÇ YÖNERGESİ (Tıklamadan Önce Ortada Görünür) -->
+        <div id="click-prompt" class="absolute top-12 left-0 right-0 text-center transition-all duration-300 z-40 px-4">
+            <div class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-black/80 border-2 border-yellow-400 text-yellow-300 text-sm font-bold shadow-[0_0_30px_rgba(250,204,21,0.35)] animate-bounce">
+                <span>Pastaya Dokun!</span>
+                <span class="text-xl">🎂</span>
+            </div>
+            <p class="text-xs text-slate-300 mt-2 font-mono bg-black/50 inline-block px-3 py-1 rounded-full">
+                Sana özel bir sürpriz var 👇
+            </p>
+        </div>
+
+        <!-- ORTA & ALT BÖLÜM: İNTERAKTİF PASTA VE İÇİNDEN ÇIKAN FOTOĞRAF -->
+        <div class="flex-1 w-full flex items-center justify-center relative my-auto">
+            <div id="cake-wrapper" class="cake-idle flex flex-col items-center justify-end" onclick="triggerBirthdaySurprise()">
+
+                <!-- PASTA İÇİNDEN ÇIKAN FOTOĞRAF -->
+                <div id="photo-surprise" class="flex flex-col items-center">
+                    <!-- Taç İkonu -->
+                    <div class="text-3xl text-yellow-400 drop-shadow-[0_0_14px_rgba(250,204,21,1)] -mb-2 z-10 animate-bounce">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+
+                    <!-- Parlayan Yuvarlak Çerçeveli Fotoğraf (Yusuf Ali'nin Fotoğrafı) -->
+                    <div class="photo-frame w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden bg-slate-900">
+                        <img id="friend-photo" 
+                             src="WhatsApp Image 2026-11-01 at 16.17.55.jpeg" 
+                             onerror="this.src='https://placehold.co/400x400/1e1b4b/facc15?text=GAZOZCUU'"
+                             alt="Yusuf Ali Doğum Günü Fotoğrafı" 
+                             class="w-full h-full object-cover object-center rounded-full" />
+                    </div>
+
+                    <!-- Fotoğraf Altı Lakap Rozeti -->
+                    <div class="mt-1.5 px-3.5 py-0.5 rounded-full bg-black/95 border border-yellow-400 text-xs font-extrabold text-yellow-300 shadow-lg tracking-wide">
+                        🍾 GAZOZCUU 🥤
+                    </div>
+                </div>
+
+                <!-- PASTA ÜST KATMANI (Mumlar + Üst Kek Katı) -->
+                <div id="cake-top-group" class="flex flex-col items-center w-full">
+                    <!-- Mumlar -->
+                    <div class="flex items-end justify-center gap-5 mb-[-3px] z-20">
+                        <!-- Mum 1 -->
+                        <div class="flex flex-col items-center">
+                            <div class="flame mb-1"></div>
+                            <div class="w-1 h-1.5 bg-slate-800"></div>
+                            <div class="w-3 h-9 rounded-t-sm bg-gradient-to-b from-amber-200 to-amber-400 border border-amber-500/40 relative overflow-hidden shadow-md">
+                                <div class="w-full h-1.5 bg-pink-500 mt-1.5"></div>
+                                <div class="w-full h-1.5 bg-pink-500 mt-1.5"></div>
+                            </div>
+                        </div>
+                        <!-- Mum 2 (Orta Uzun) -->
+                        <div class="flex flex-col items-center">
+                            <div class="flame mb-1"></div>
+                            <div class="w-1 h-1.5 bg-slate-800"></div>
+                            <div class="w-3.5 h-12 rounded-t-sm bg-gradient-to-b from-amber-200 to-amber-400 border border-amber-500/40 relative overflow-hidden shadow-md">
+                                <div class="w-full h-1.5 bg-purple-500 mt-2"></div>
+                                <div class="w-full h-1.5 bg-purple-500 mt-2"></div>
+                                <div class="w-full h-1.5 bg-purple-500 mt-2"></div>
+                            </div>
+                        </div>
+                        <!-- Mum 3 -->
+                        <div class="flex flex-col items-center">
+                            <div class="flame mb-1"></div>
+                            <div class="w-1 h-1.5 bg-slate-800"></div>
+                            <div class="w-3 h-9 rounded-t-sm bg-gradient-to-b from-amber-200 to-amber-400 border border-amber-500/40 relative overflow-hidden shadow-md">
+                                <div class="w-full h-1.5 bg-pink-500 mt-1.5"></div>
+                                <div class="w-full h-1.5 bg-pink-500 mt-1.5"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Üst Kek Katmanı -->
+                    <div class="w-40 h-16 bg-gradient-to-r from-pink-500 via-rose-400 to-pink-500 rounded-t-2xl relative shadow-lg border-t-4 border-pink-200 overflow-hidden">
+                        <div class="w-full h-4 bg-pink-100 flex justify-around items-start">
+                            <div class="icing-drip w-4 h-6"></div>
+                            <div class="icing-drip w-5 h-8"></div>
+                            <div class="icing-drip w-4 h-5"></div>
+                            <div class="icing-drip w-5 h-8"></div>
+                            <div class="icing-drip w-4 h-6"></div>
+                        </div>
+                        <div class="absolute bottom-2 left-5 w-2.5 h-1.5 rounded-full bg-yellow-300 rotate-12"></div>
+                        <div class="absolute bottom-4 left-14 w-2.5 h-1.5 rounded-full bg-sky-300 -rotate-12"></div>
+                        <div class="absolute bottom-2 right-10 w-2.5 h-1.5 rounded-full bg-emerald-300 rotate-45"></div>
+                    </div>
+                </div>
+
+                <!-- PASTA ALT KATMANI (Alt Kek Katı + Servis Tabağı) -->
+                <div id="cake-bottom-group" class="flex flex-col items-center w-full -mt-1">
+                    <div class="w-52 h-24 bg-gradient-to-r from-purple-700 via-fuchsia-600 to-purple-700 rounded-t-2xl rounded-b-lg relative shadow-2xl border-t-4 border-pink-200 overflow-hidden flex flex-col justify-between">
+                        <div class="w-full h-5 bg-pink-100 flex justify-around items-start">
+                            <div class="icing-drip w-5 h-8"></div>
+                            <div class="icing-drip w-6 h-10"></div>
+                            <div class="icing-drip w-5 h-7"></div>
+                            <div class="icing-drip w-6 h-9"></div>
+                            <div class="icing-drip w-5 h-8"></div>
+                            <div class="icing-drip w-5 h-7"></div>
+                        </div>
+
+                        <div class="flex justify-around items-center px-4 pb-2.5">
+                            <span class="w-3 h-3 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
+                            <span class="w-2 h-2 rounded-full bg-pink-300"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
+                            <span class="w-2 h-2 rounded-full bg-pink-300"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
+                        </div>
+                    </div>
+
+                    <!-- Altın Pasta Tabağı -->
+                    <div class="w-60 h-4 bg-gradient-to-r from-amber-500 via-yellow-300 to-amber-500 rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.9)] border border-amber-200"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ALT BÖLÜM: TEKRAR KUTLA VE KONFETİ BUTONLARI (Pasta Açılınca Görünür) -->
+        <div id="bottom-action-bar" class="w-full flex items-center justify-center gap-2.5 z-50 opacity-0 pointer-events-none transition-opacity duration-500 pb-1">
+            <button onclick="fireExtraConfetti()" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-pink-500 text-slate-950 font-extrabold text-xs sm:text-sm shadow-[0_0_25px_rgba(250,204,21,0.5)] active:scale-95 flex items-center gap-1.5">
+                <i class="fa-solid fa-champagne-glasses"></i>
+                <span>Konfeti Patlat! 🎉</span>
+            </button>
+            <button onclick="resetSurprise()" class="px-4 py-2.5 rounded-full bg-black/80 hover:bg-black border border-yellow-400/60 text-yellow-300 font-bold text-xs sm:text-sm shadow-lg active:scale-95 flex items-center gap-1.5">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Tekrar Kutla</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- ALT BİLGİ -->
+    <footer class="w-full text-center z-20 shrink-0">
+        <p class="text-[11px] text-slate-400 font-mono">
+            &lt;/&gt; Yusuf Ali (Gazozcuu) için özel kodlandı ❤️
+        </p>
+    </footer>
+
+    <!-- ÖZELLEŞTİRME MODALI (Fotoğraf Yükleme & İsim/Mesaj Değiştirme) -->
+    <div id="customize-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-fadeIn">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-5">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Sürprizi Özelleştir</h2>
+                        <p class="text-xs text-slate-400">Fotoğrafı veya kutlama mesajını güncelle</p>
+                    </div>
+                </div>
+                <button onclick="closeCustomizeModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Arkadaşının Lakabı / Başlık Rozeti -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                        Lakap / Üst Rozet
+                    </label>
+                    <input type="text" id="input-name" value="GAZOZCUU 🍾🥤" placeholder="Örn: GAZOZCUU 🍾🥤" 
+                           class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400 transition-colors">
+                </div>
+
+                <!-- Bilgisayardan/Telefondan Fotoğraf Seçme -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                        Pastadan Çıkacak Fotoğrafı Seç
+                    </label>
+                    <label class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 border-2 border-dashed border-slate-600 hover:border-amber-400 cursor-pointer transition-all text-sm text-slate-300">
+                        <i class="fa-solid fa-cloud-arrow-up text-amber-400 text-lg"></i>
+                        <span id="file-label-text">Farklı Fotoğraf Yükle (.jpg, .png)</span>
+                        <input type="file" id="input-photo-file" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+                    </label>
+                </div>
+
+                <!-- Veya Fotoğraf Linki -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                        Veya Fotoğraf URL'si Yapıştır
+                    </label>
+                    <input type="url" id="input-photo-url" placeholder="https://..." 
+                           class="w-full px-3.5 py-2 rounded-xl bg-slate-800/90 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400 transition-colors">
+                </div>
+
+                <!-- Doğum Günü Mesajı -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                        Doğum Günü Açıklaması
+                    </label>
+                    <textarea id="input-message" rows="2" 
+                              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400 transition-colors resize-none">MUTLU YILLAR YUSUF ALİİ! 🎉🎂</textarea>
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+                <button onclick="closeCustomizeModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition-colors">
+                    İptal
+                </button>
+                <button onclick="saveCustomization()" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm shadow-lg transition-all active:scale-95">
+                    Kaydet ve Sürprizi Dene
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Durum Değişkenleri
+        let isOpened = false;
+        let isMuted = false;
+        let uploadedPhotoDataUrl = null;
+        let synth = null;
+
+        // Sürprizi Başlatan Ana Fonksiyon
+        async function triggerBirthdaySurprise() {
+            if (isOpened) return;
+            isOpened = true;
+
+            const cakeWrapper = document.getElementById('cake-wrapper');
+            const clickPrompt = document.getElementById('click-prompt');
+            const celebrationBanner = document.getElementById('celebration-banner');
+            const bottomActionBar = document.getElementById('bottom-action-bar');
+            const replayBtn = document.getElementById('replay-btn');
+
+            // Yönergeyi gizle ve sahne ışığını büyüt
+            clickPrompt.style.opacity = '0';
+            clickPrompt.style.transform = 'translateY(-10px)';
+            setTimeout(() => clickPrompt.classList.add('hidden'), 300);
+            document.body.classList.add('stage-active');
+
+            // 1. AŞAMA: Pasta Yaklaşsın
+            cakeWrapper.classList.remove('cake-idle');
+            cakeWrapper.classList.add('cake-zoomed');
+
+            // Yaklaşma ses efekti
+            playZoomSound();
+
+            // 2. AŞAMA: Pasta Açılsın ve İçinden Fotoğraf Çıksın (650ms sonra)
+            setTimeout(() => {
+                cakeWrapper.classList.remove('cake-zoomed');
+                cakeWrapper.classList.add('cake-opened');
+
+                // Konfeti Patlaması
+                launchGrandConfetti();
+
+                // "İyi ki Doğdun" Melodisi Çal
+                playHappyBirthdayMelody();
+            }, 650);
+
+            // 3. AŞAMA: Üstteki Net "İyi Ki Doğdun" Kartı ve Alt Buton Belirsin (950ms sonra)
+            setTimeout(() => {
+                celebrationBanner.classList.add('show-banner');
+                bottomActionBar.classList.remove('opacity-0', 'pointer-events-none');
+                bottomActionBar.classList.add('opacity-100', 'pointer-events-auto');
+                replayBtn.classList.remove('hidden');
+                replayBtn.classList.add('flex');
+            }, 950);
+        }
+
+        // Sürprizi Başa Sar (Tekrar Oynat)
+        function resetSurprise() {
+            isOpened = false;
+
+            const cakeWrapper = document.getElementById('cake-wrapper');
+            const clickPrompt = document.getElementById('click-prompt');
+            const celebrationBanner = document.getElementById('celebration-banner');
+            const bottomActionBar = document.getElementById('bottom-action-bar');
+            const replayBtn = document.getElementById('replay-btn');
+
+            celebrationBanner.classList.remove('show-banner');
+            bottomActionBar.classList.add('opacity-0', 'pointer-events-none');
+            bottomActionBar.classList.remove('opacity-100', 'pointer-events-auto');
+            cakeWrapper.classList.remove('cake-opened', 'cake-zoomed');
+            document.body.classList.remove('stage-active');
+
+            replayBtn.classList.add('hidden');
+            replayBtn.classList.remove('flex');
+
+            setTimeout(() => {
+                clickPrompt.classList.remove('hidden');
+                setTimeout(() => {
+                    clickPrompt.style.opacity = '1';
+                    clickPrompt.style.transform = 'translateY(0)';
+                }, 50);
+                cakeWrapper.classList.add('cake-idle');
+            }, 350);
+        }
+
+        // Büyük Konfeti Patlaması
+        function launchGrandConfetti() {
+            // Merkez patlama
+            confetti({
+                particleCount: 110,
+                spread: 80,
+                origin: { y: 0.55 },
+                colors: ['#fbbf24', '#ec4899', '#38bdf8', '#a855f7', '#4ade80']
+            });
+
+            // Sağ ve sol konfeti topları
+            const duration = 2600;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.65 },
+                    colors: ['#fbbf24', '#f472b6', '#60a5fa']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.65 },
+                    colors: ['#fbbf24', '#c084fc', '#34d399']
+                });
+
+                if (Date.now() < end && isOpened) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+
+        // Butonla Ekstra Konfeti Patlatma
+        function fireExtraConfetti() {
+            confetti({
+                particleCount: 90,
+                spread: 100,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Tone.js ile Pasta Yaklaşma Ses Efekti
+        async function playZoomSound() {
+            if (isMuted) return;
+            try {
+                await Tone.start();
+                const whooshSynth = new Tone.Synth({
+                    oscillator: { type: 'sine' },
+                    envelope: { attack: 0.2, decay: 0.3, sustain: 0.1, release: 0.3 }
+                }).toDestination();
+                whooshSynth.volume.value = -10;
+                whooshSynth.triggerAttackRelease("C4", "8n");
+                setTimeout(() => whooshSynth.triggerAttackRelease("G4", "8n"), 200);
+            } catch (e) {
+                // Tarayıcı ses izni engellerse sessiz devam et
+            }
+        }
+
+        // Tone.js ile Neşeli "İyi Ki Doğdun" Melodisi
+        async function playHappyBirthdayMelody() {
+            if (isMuted) return;
+            try {
+                await Tone.start();
+                if (!synth) {
+                    synth = new Tone.PolySynth(Tone.Synth, {
+                        oscillator: { type: "triangle" },
+                        envelope: { attack: 0.03, decay: 0.15, sustain: 0.2, release: 0.6 }
+                    }).toDestination();
+                    synth.volume.value = -6;
+                }
+
+                const now = Tone.now();
+                const melody = [
+                    { note: "C4", duration: "8n", time: 0.0 },
+                    { note: "C4", duration: "8n", time: 0.25 },
+                    { note: "D4", duration: "4n", time: 0.5 },
+                    { note: "C4", duration: "4n", time: 1.0 },
+                    { note: "F4", duration: "4n", time: 1.5 },
+                    { note: "E4", duration: "2n", time: 2.0 },
+
+                    { note: "C4", duration: "8n", time: 2.8 },
+                    { note: "C4", duration: "8n", time: 3.05 },
+                    { note: "D4", duration: "4n", time: 3.3 },
+                    { note: "C4", duration: "4n", time: 3.8 },
+                    { note: "G4", duration: "4n", time: 4.3 },
+                    { note: "F4", duration: "2n", time: 4.8 }
+                ];
+
+                melody.forEach(item => {
+                    synth.triggerAttackRelease(item.note, item.duration, now + item.time);
+                });
+            } catch (e) {
+                // Ses hatası olursa yoksay
+            }
+        }
+
+        // Sesi Aç / Kapat
+        function toggleMute() {
+            isMuted = !isMuted;
+            const icon = document.getElementById('sound-icon');
+            if (isMuted) {
+                icon.className = 'fa-solid fa-volume-xmark text-rose-400';
+            } else {
+                icon.className = 'fa-solid fa-volume-high text-amber-300';
+            }
+        }
+
+        // Özelleştirme Modalını Aç / Kapat
+        function openCustomizeModal() {
+            const modal = document.getElementById('customize-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCustomizeModal() {
+            const modal = document.getElementById('customize-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Cihazdan Fotoğraf Seçildiğinde Okuma
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedPhotoDataUrl = e.target.result;
+                document.getElementById('file-label-text').textContent = "Seçildi: " + file.name;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Özelleştirmeleri Kaydet ve Sahneyi Sıfırlayarak Test Et
+        function saveCustomization() {
+            const nameInput = document.getElementById('input-name').value.trim();
+            const urlInput = document.getElementById('input-photo-url').value.trim();
+            const messageInput = document.getElementById('input-message').value.trim();
+
+            if (nameInput) {
+                document.getElementById('display-name').textContent = nameInput.toLocaleUpperCase('tr-TR');
+            }
+
+            if (uploadedPhotoDataUrl) {
+                document.getElementById('friend-photo').src = uploadedPhotoDataUrl;
+            } else if (urlInput) {
+                document.getElementById('friend-photo').src = urlInput;
+            }
+
+            if (messageInput) {
+                document.getElementById('display-message').textContent = messageInput;
+            }
+
+            closeCustomizeModal();
+            resetSurprise();
+        }
+    </script>
+</body>
+</html>
